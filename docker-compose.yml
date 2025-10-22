@@ -1,0 +1,129 @@
+version: '3.8'
+
+# =============================================================================
+# GE2PE Diacritization Service - Docker Compose Configuration
+# =============================================================================
+
+services:
+  # Main phonemizer API service
+  phonemizer:
+    # Build context: current directory
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Container name (easier to reference)
+    container_name: ge2pe-api
+    
+    # Port mapping: host:container
+    # Access API at http://localhost:8000
+    ports:
+      - "8000:8000"
+    
+    # Environment variables
+    environment:
+      # Model checkpoint path inside container
+      - GE2PE_MODEL_PATH=/app/GE2PE/content/checkpoint-320
+      # GPU usage: auto-detect (set to 'false' to force CPU)
+      - USE_GPU=auto
+      # Python unbuffered output for better logs
+      - PYTHONUNBUFFERED=1
+    
+    # Volume mounts (optional)
+    volumes:
+      # Mount local model checkpoints to container
+      # Uncomment and adjust path if you have trained models locally
+      # - ./checkpoints:/app/GE2PE/content
+      
+      # Mount dataset (useful for training)
+      # - ./data:/app/data
+      
+      # Mount for live code updates during development
+      # - ./api:/app/api
+    
+    # Restart policy: always restart if container stops
+    restart: unless-stopped
+    
+    # Resource limits (adjust based on your hardware)
+    deploy:
+      resources:
+        limits:
+          # Maximum CPU cores (2 cores)
+          cpus: '2.0'
+          # Maximum memory (4GB)
+          memory: 4G
+        reservations:
+          # Minimum guaranteed resources
+          cpus: '0.5'
+          memory: 1G
+    
+    # Health check configuration
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    # Network configuration
+    networks:
+      - phonemizer-network
+
+# Define custom network (useful if you add Redis, PostgreSQL, etc.)
+networks:
+  phonemizer-network:
+    driver: bridge
+
+# =============================================================================
+# USAGE INSTRUCTIONS:
+# =============================================================================
+#
+# 1. BUILD AND START:
+#    docker-compose up --build
+#
+# 2. START IN BACKGROUND:
+#    docker-compose up -d
+#
+# 3. VIEW LOGS:
+#    docker-compose logs -f phonemizer
+#
+# 4. STOP SERVICE:
+#    docker-compose down
+#
+# 5. REBUILD AFTER CODE CHANGES:
+#    docker-compose up --build
+#
+# 6. RUN WITH GPU (requires nvidia-docker):
+#    docker-compose up
+#    (GPU auto-detected if nvidia-docker is installed)
+#
+# =============================================================================
+# EXTENDING WITH ADDITIONAL SERVICES:
+# =============================================================================
+#
+# Add Redis for distributed caching:
+#
+#   redis:
+#     image: redis:7-alpine
+#     container_name: ge2pe-redis
+#     ports:
+#       - "6379:6379"
+#     networks:
+#       - phonemizer-network
+#
+# Add PostgreSQL for storing request logs:
+#
+#   postgres:
+#     image: postgres:15-alpine
+#     container_name: ge2pe-db
+#     environment:
+#       POSTGRES_DB: phonemizer
+#       POSTGRES_USER: admin
+#       POSTGRES_PASSWORD: changeme
+#     volumes:
+#       - postgres-data:/var/lib/postgresql/data
+#     networks:
+#       - phonemizer-network
+#
+# volumes:
+#   postgres-data:

@@ -1,0 +1,92 @@
+# =============================================================================
+# .dockerignore - Exclude files from Docker build context
+# =============================================================================
+# This reduces build context size and speeds up Docker builds
+# Similar to .gitignore but for Docker
+
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation
+docs/_build/
+*.md
+README.md
+
+# Large dataset files (comment out if needed in container)
+*.csv
+*.tsv
+*.json
+*.jsonl
+# Uncomment if you want to include specific datasets:
+# !phonemizer_dataset_v1.csv
+
+# Model checkpoints (mount via volume instead)
+checkpoints/
+checkpoints_*/
+*.pt
+*.pth
+*.bin
+*.ckpt
+# Uncomment if you want to include specific checkpoints:
+# !GE2PE/content/checkpoint-320/
+
+# Logs
+*.log
+logs/
+
+# Docker files (don't need these inside the image)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# CI/CD files
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS-specific files
+Thumbs.db
+Desktop.ini
+
+# Package management
+*.egg-info/
+dist/
+build/
