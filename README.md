@@ -10,13 +10,14 @@ Complete Persian diacritization and phonemization system using T5-based GE2PE mo
 
 **بدون نیاز به نصب، فقط یک کلیک!**
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elikaaghaei/Rahnema_college_phonemizer_v1/blob/main/GE2PE_Colab_Demo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elikaaghaei/Rahnema_college_phonemizer_v1/blob/main/GE2PE_Colab_Demo_Fixed.ipynb)
 
 مزایا:
 - ✅ GPU رایگان
 - ✅ بدون نیاز به فضای دیسک
 - ✅ اجرا در 2 دقیقه
-- ✅ API آنلاین با ngrok
+- ✅ UI زیبا با Gradio (بدون نیاز به authtoken)
+- ✅ استفاده از GE2PE واقعی
 
 ## 📋 Features
 
